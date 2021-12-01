@@ -1,0 +1,81 @@
+import pymysql
+
+class DataBase:
+    def __init__(self):
+        
+        self.connection = pymysql.connect(
+            host = 'localhost',
+            user = 'root',
+            password='',
+            db='db_clientes'
+        )
+        #print("Conexion exitosa")
+        try:
+            self.cursor = self.connection.cursor()
+        
+        except Exception as e:
+            raise
+
+objconexion = DataBase()
+
+
+from cls_db import DataBase
+from werkzeug.security import generate_password_hash, check_password_hash
+
+class tb_clientes(DataBase):
+    objconexion = DataBase()
+
+    def listar_clientes(self, id_cliente):
+        sql = "SELECT * FROM clientes WHERE id_cliente = {}".format(id_cliente)
+        try:
+            self.cursor.execute(sql)
+            cliente = self.cursor.fetchone()
+            print("Id cliente: ", cliente[0])
+            print("Nombre: ", cliente[1])
+            print("Apellido paterno: ", cliente[2])
+            print("Apellido materno: ", cliente[3])
+        except Exception as e:
+            raise
+
+    def nuevo_cliente(self, nombre, ap1,ap2, cli_clave):
+        texto_encriptado = generate_password_hash
+        sql = "INSERT INTO clientes (cli_nombre, cli_paterno, cli_materno) VALUES ('{}', '{}', '{}','{}');".format(nombre, ap1, ap2, texto_encriptado)
+        try:
+            self.cursor.execute(sql)
+            self.connection.commit()
+        except Exception as e:
+            self.connection.close()
+
+    def modificar_cliente(self, id_cliente,nombre, ap1,ap2):
+        sql= "UPDATE clientes SET cli_nombre = '{}', cli_paterno = '{}', cli_materno = '{}' WHERE clientes.id_cliente = {};".format(nombre, ap1, ap2, id_cliente)
+        try:
+            self.cursor.execute(sql)
+            self.connection.commit()
+        except Exception as e:
+            self.connection.close()
+
+    def eliminar_cliente(self, id_cliente):
+        sql = "DELETE FROM clientes WHERE clientes.id_cliente = {}".format(id_cliente)
+        try:
+            self.cursor.execute(sql)
+            self.connection.commit()
+        except Exception as e:
+            self.connection.close()
+
+objcliente=tb_clientes()
+#objcliente.listar_clientes(1)
+#objcliente.listar_clientes(2)
+#objcliente.nuevo_cliente("David", "Rivera", "Godoy")
+#objcliente.listar_clientes(2)
+#objcliente.modificar_cliente(2, "Davidas", "Riveraas", "Godoyas")
+#objcliente.listar_clientes(1)
+#objcliente.eliminar_cliente(4)
+#m_id=int(input("Ingrese id del cliente"))
+#objcliente.listar_clientes(m_id)
+#m_nombre=(input("Ingrese nombre"))
+#m_ap1=(input("Ingrese apellido paterno"))
+#m_ap2=input("Ingrese apellido materno")
+#objcliente.modificar_cliente(m_id, m_nombre, m_ap1, m_ap2)
+objcliente.nuevo_cliente("David ee2", "Rivera ee2", "Godoy e2e", "clave encriptad2222aaaa")
+
+objcliente.listar_clientes(1)
